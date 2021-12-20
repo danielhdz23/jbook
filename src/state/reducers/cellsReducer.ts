@@ -46,13 +46,26 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
         id: randomId()
       };
       state.data[cell.id] = cell;
-      const i = state.order.findIndex((id) => id === action.payload.id);
-      if (i < 0) {
+      const k = state.order.findIndex((id) => id === action.payload.id);
+      if (k < 0) {
         state.order.push(cell.id);
       } else {
-        state.order.splice(i, 0, cell.id);
+        state.order.splice(k, 0, cell.id);
       }
-
+      return state;
+    case ActionType.INSERT_CELL_AFTER:
+      const c: Cell = {
+        content: '',
+        type: action.payload.type,
+        id: randomId()
+      };
+      state.data[c.id] = c;
+      const i = state.order.findIndex((id) => id === action.payload.id);
+      if (i < 0) {
+        state.order.unshift(c.id);
+      } else {
+        state.order.splice(i + 1, 0, c.id);
+      }
       return state;
     default:
       return state;
